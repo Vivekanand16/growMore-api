@@ -3,6 +3,6 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/servers/:splat"
+  to = "/.netlify/functions/api/:splat"
   status = 200
   query = {path = ":path"} #  apply this rule for /old-path?path=example
