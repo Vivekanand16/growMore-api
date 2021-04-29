@@ -1,7 +1,7 @@
 import express from "express";
 import serverless from "serverless-http";
-import * as bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import { userRouter, productRouter } from "./routes";
 
