@@ -23,8 +23,7 @@ export async function getProducts(req, res) {
     errorMessage = err.message;
   }
 
-  res.status(status);
-  res.json({
+  res.status(status).json({
     status,
     errorCode,
     errorMessage,
