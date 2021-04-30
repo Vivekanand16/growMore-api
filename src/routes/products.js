@@ -1,9 +1,9 @@
 import express from "express";
-import { isAuthenticated, getProducts } from "../controller";
+import { getProducts } from "../controller";
 
 const productRouter = express.Router();
 
-productRouter.get("/", isAuthenticated, getProducts);
+productRouter.get("/", getProducts);
 productRouter.get("/noauth", getProducts);
 
 export default productRouter;
