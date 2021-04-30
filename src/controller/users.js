@@ -3,9 +3,14 @@ import { db } from "../firebase";
 const usersDB = db.collection("users");
 
 export function validatePostData(req, res, next) {
-  const userName = req.body.userName;
+  const { userName, deviceToken, ...restPostData } = req.body;
+  const malformedData = Object.entries(restPostData).length > 0;
+  console.log(userName, deviceToken, malformedData);
 
-  if (!userName) {
+  // if both username and deviceToken is not passed
+  // if any other fields are passed
+  // consider as bad request
+  if ((!userName && !deviceToken) || malformedData) {
     return res.status(400).json({
       status: 400,
       errorCode: "bad-request",
@@ -24,6 +29,7 @@ export async function createUser(req, res) {
     const { uid } = res.locals;
     await usersDB.doc(uid).set({
       userName: "",
+      deviceToken: "",
       isSubscribed: false,
     });
   } catch (err) {
@@ -46,9 +52,9 @@ export async function updateUser(req, res) {
 
   try {
     const { uid } = res.locals;
-    const userName = req.body.userName;
+    const postData = req.body;
     await usersDB.doc(uid).update({
-      userName,
+      ...postData,
     });
   } catch (err) {
     status = 500;

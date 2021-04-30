@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  isAuthenticated,
   validatePostData,
   createUser,
   updateUser,
@@ -9,9 +8,9 @@ import {
 
 const userRouter = express.Router();
 
-userRouter.post("/create", isAuthenticated, createUser);
-userRouter.get("/profile", isAuthenticated, getProfile);
-userRouter.patch("/update", isAuthenticated, validatePostData, updateUser);
+userRouter.post("/create", createUser);
+userRouter.get("/profile", getProfile);
+userRouter.patch("/update", validatePostData, updateUser);
 
 export default userRouter;
 export { userRouter };
