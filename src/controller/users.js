@@ -5,7 +5,6 @@ const usersDB = db.collection("users");
 export function validatePostData(req, res, next) {
   const { userName, deviceToken, ...restPostData } = req.body;
   const malformedData = Object.entries(restPostData).length > 0;
-  console.log("userName", userName);
 
   // if both username and deviceToken is not passed
   // if any other fields are passed
@@ -76,7 +75,6 @@ export async function getProfile(req, res) {
   const data = {};
 
   try {
-    console.log("getprofile");
     const { uid } = res.locals;
     const response = await usersDB.doc(uid).get();
 
@@ -90,12 +88,10 @@ export async function getProfile(req, res) {
       data.isSubscribed = isSubscribed;
     }
   } catch (err) {
-    console.log("catch called", err);
     status = 500;
     errorCode = err.code;
     errorMessage = err.message;
   }
-  console.log("Data", data);
   res.status(status).json({
     status,
     errorCode,

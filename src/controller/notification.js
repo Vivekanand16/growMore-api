@@ -45,7 +45,6 @@ async function sendNotification(messages) {
   for (let chunk of chunks) {
     try {
       let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-      console.log(ticketChunk);
       tickets.push(...ticketChunk);
     } catch (err) {
       errorMessage = err.message;
