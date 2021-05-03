@@ -5,7 +5,6 @@ const usersDB = db.collection("users");
 export function validatePostData(req, res, next) {
   const { userName, deviceToken, ...restPostData } = req.body;
   const malformedData = Object.entries(restPostData).length > 0;
-  console.log(userName, deviceToken, malformedData);
 
   // if both username and deviceToken is not passed
   // if any other fields are passed
@@ -93,7 +92,6 @@ export async function getProfile(req, res) {
     errorCode = err.code;
     errorMessage = err.message;
   }
-
   res.status(status).json({
     status,
     errorCode,
