@@ -9,6 +9,7 @@ import {
 
 const notificationRouter = express.Router();
 
+// TODO: Move notification service as a separate serverless function
 // validate if the user has admin privileges
 notificationRouter.all("*", isAdmin, validateNotifyPostData);
 

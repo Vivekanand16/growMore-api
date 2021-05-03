@@ -60,6 +60,7 @@ export async function notifyAll(req, res) {
   const response = await usersDB.get();
   const allUsers = response.docs.map((doc) => doc.data().deviceToken);
   const messages = constructMessage(req.body, allUsers);
+  await sendNotification(messages);
 
   res.status(200).json({
     status: 200,
@@ -71,6 +72,7 @@ export async function notifySubscribers(req, res) {
   const response = await usersDB.where("isSubscribed", "==", true).get();
   const subscribedUsers = response.docs.map((doc) => doc.data().deviceToken);
   const messages = constructMessage(req.body, subscribedUsers);
+  await sendNotification(messages);
 
   res.status(200).json({
     status: 200,
@@ -82,6 +84,7 @@ export async function notifyNonSubscribers(req, res) {
   const response = await usersDB.where("isSubscribed", "==", false).get();
   const nonSubscribedUsers = response.docs.map((doc) => doc.data().deviceToken);
   const messages = constructMessage(req.body, nonSubscribedUsers);
+  await sendNotification(messages);
 
   res.status(200).json({
     status: 200,
