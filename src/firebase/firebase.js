@@ -6,6 +6,7 @@ if (!admin.apps.length) {
     credential: admin.credential.cert(serviceAccount),
   });
 }
+
 const auth = admin.auth();
 const db = admin.firestore();
 

@@ -1,5 +1,6 @@
 import { Expo } from "expo-server-sdk";
 import { db } from "../firebase";
+import { BadRequestError } from "../errors";
 
 const expo = new Expo();
 const usersDB = db.collection("users");
@@ -7,11 +8,7 @@ const usersDB = db.collection("users");
 export function validateNotifyPostData(req, res, next) {
   const { title, body } = req.body;
   if (!title && !body) {
-    return res.status(400).json({
-      status: 400,
-      errorCode: "bad-request",
-      errorMessage: "Please make call with valid post data.",
-    });
+    return next(new BadRequestError());
   }
   next();
 }

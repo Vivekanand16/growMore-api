@@ -1,17 +1,11 @@
 import { auth, db } from "../firebase";
+import { NotAuthorizedError, NotAdminError } from "../errors";
 
 const usersDB = db.collection("users");
-
-const nonSecurePaths = ["/.netlify/functions/api/products/noauth"];
-const notAuthenticatedResponse = {
-  status: 401,
-  errorMessage: "Unauthorized",
-};
-
-const notAdminResponse = {
-  status: 401,
-  errorMessage: "You don't have privileges.",
-};
+const nonSecurePaths = [
+  "/.netlify/functions/api/products/noauth",
+  "/.netlify/functions/api/payment/webhooks",
+];
 
 function isValidAuthorizationHeader(authorization) {
   // Bearer <idToken>
@@ -19,12 +13,7 @@ function isValidAuthorizationHeader(authorization) {
   const idToken = bearerSplit[1];
   let isValidToken = true;
 
-  if (
-    !authorization ||
-    !authorization.startsWith("Bearer") ||
-    bearerSplit.length !== 2 ||
-    !idToken
-  ) {
+  if (!authorization.startsWith("Bearer") || !idToken) {
     isValidToken = false;
   }
   return { isValidToken, idToken };
@@ -38,7 +27,7 @@ export async function isAuthenticated(req, res, next) {
   const { isValidToken, idToken } = isValidAuthorizationHeader(authorization);
 
   if (!isValidToken) {
-    return res.status(401).json(notAuthenticatedResponse);
+    return next(new NotAuthorizedError());
   }
 
   try {
@@ -49,7 +38,7 @@ export async function isAuthenticated(req, res, next) {
       next();
     }
   } catch (err) {
-    return res.status(401).json(notAuthenticatedResponse);
+    return next(new NotAuthorizedError());
   }
 }
 
@@ -59,10 +48,10 @@ export async function isAdmin(req, res, next) {
     const response = await usersDB.doc(uid).get();
     const { isAdmin = false } = response.data();
     if (!response.exists || !isAdmin) {
-      return res.status(401).json(notAdminResponse);
+      return next(new NotAdminError());
     }
     next();
   } catch (err) {
-    return res.status(401).json(notAdminResponse);
+    return next(new NotAdminError());
   }
 }
