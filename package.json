@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "netlify-lambda serve --config ./config/webpack.functions.js src",
-    "build": "netlify-lambda build --config ./config/webpack.functions.js src"
+    "serve": "cross-env NODE_ENV=production netlify-lambda serve --config ./config/webpack.functions.js src",
+    "build": "cross-env NODE_ENV=development netlify-lambda build --config ./config/webpack.functions.js src",
+    "test": "cross-env NODE_ENV=test mocha --require @babel/register --require @babel/polyfill --timeout 10000"
   },
   "keywords": [],
   "author": "",
@@ -15,13 +16,25 @@
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
+    "dotenv-webpack": "^7.0.2",
     "expo-server-sdk": "^3.6.0",
     "express": "^4.17.1",
     "firebase-admin": "^9.6.0",
     "netlify-lambda": "^2.0.5",
-    "serverless-http": "^2.7.0"
+    "serverless-http": "^2.7.0",
+    "stripe": "^8.148.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.13.16",
+    "@babel/core": "^7.14.0",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.14.1",
+    "@babel/register": "^7.13.16",
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "^9.0.0",
+    "mocha": "^8.3.2",
     "webpack-node-externals": "^3.0.0"
   }
 }
