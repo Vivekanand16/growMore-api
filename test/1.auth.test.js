@@ -11,7 +11,7 @@ describe("Create google auth session", () => {
     chai
       .request("https://www.googleapis.com")
       .post(
-        "/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyDZk9eCWyodZI9WLMY89lA0RtO_c7biAkk"
+        "/identitytoolkit/v3/relyingparty/verifyPassword?key="
       )
       .send({
         email: "test@test.com",
