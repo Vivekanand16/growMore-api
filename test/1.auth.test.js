@@ -11,11 +11,11 @@ describe("Create google auth session", () => {
     chai
       .request("https://www.googleapis.com")
       .post(
-        "/identitytoolkit/v3/relyingparty/verifyPassword?key="
+        `/identitytoolkit/v3/relyingparty/verifyPassword?key=${GOOGLE_WEB_API_KEY}`
       )
       .send({
-        email: "test@test.com",
-        password: "Test123",
+        email: process.env.TEST_EMAIL,
+        password: process.env.TEST_PASSWORD,
         returnSecureToken: true,
       })
       .set("Content-Type", "application/json")
