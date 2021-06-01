@@ -5,6 +5,7 @@ import {
   updateUser,
   getProfile,
   getSavedCards,
+  testUser,
 } from "../controller";
 
 const userRouter = express.Router();

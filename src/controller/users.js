@@ -93,29 +93,30 @@ export async function getSavedCards(req, res, next) {
     }
 
     const { stripeCustomerId } = user.data();
-    const cards = await stripe.customers.listSources(stripeCustomerId, {
-      object: "card",
+    const paymentMethods = await stripe.paymentMethods.list({
+      customer: stripeCustomerId,
+      type: "card",
       limit: 5,
     });
-    if (!cards.data.length) {
+    if (!paymentMethods.data.length) {
       return next(new NotFoundError("No cards found."));
     }
     //filtering response fields
-    const { data, has_more } = cards;
-    data.forEach((card) => {
-      const { id, brand, cvc_check, exp_month, exp_year, last4, name } = card;
+    const { data = [], has_more } = paymentMethods;
+    data.forEach((paymentMethod) => {
+      const { id, card = {} } = paymentMethod;
+      const { brand, exp_month, exp_year, last4 } = card;
       cardsInfo.push({
         id,
         brand,
-        cvc_check,
         exp_month,
         exp_year,
         last4,
-        name,
       });
     });
 
     res.status(200).json({
+      status: 200,
       cards: cardsInfo,
       hasMore: has_more,
     });

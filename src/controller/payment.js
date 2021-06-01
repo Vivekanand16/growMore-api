@@ -1,9 +1,13 @@
+import { db } from "../firebase";
 import stripe from "../stripe";
 import { PaymentError, InternalServerError } from "../errors";
+
+const usersDB = db.collection("users");
 
 export function config(req, res, next) {
   try {
     res.status(200).json({
+      status: 200,
       publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
     });
   } catch (err) {
@@ -17,17 +21,18 @@ export async function createPaymentIntent(req, res, next) {
     // Rs 1 = 100 paisa
     const { uid } = res.locals;
     const user = await usersDB.doc(uid).get();
+    const { stripeCustomerId } = user.data();
     const amount = 100 * 100; // Rs.100
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
       currency: "inr",
-      customer: user.stripeCustomerId || "",
+      customer: stripeCustomerId || "",
       payment_method_types: ["card"],
-      confirm: true,
     });
 
     res.status(200).json({
-      client_secret: paymentIntent.client_secret,
+      status: 200,
+      clientSecret: paymentIntent.client_secret,
     });
   } catch (err) {
     return next(new PaymentError(err.message));
@@ -35,7 +40,5 @@ export async function createPaymentIntent(req, res, next) {
 }
 
 export async function webhooks(req, res, next) {
-  res.status(200).json({
-    msg: "webhook called",
-  });
+  console.log("=============WEBHOOK CALLED=============");
 }
