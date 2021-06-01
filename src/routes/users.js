@@ -4,6 +4,8 @@ import {
   createUser,
   updateUser,
   getProfile,
+  getSavedCards,
+  testUser,
 } from "../controller";
 
 const userRouter = express.Router();
@@ -11,6 +13,7 @@ const userRouter = express.Router();
 userRouter.post("/create", createUser);
 userRouter.get("/profile", getProfile);
 userRouter.patch("/update", validatePostData, updateUser);
+userRouter.get("/savedcards", getSavedCards);
 
 export default userRouter;
 export { userRouter };

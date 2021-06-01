@@ -1,11 +1,9 @@
 import { db } from "../firebase";
+import { NotFoundError, InternalServerError } from "../errors";
 
 const productsDB = db.collection("products");
 
-export async function getProducts(req, res) {
-  let status = 200;
-  let errorCode = "";
-  let errorMessage = "";
+export async function getProducts(req, res, next) {
   let productResponse = [];
 
   try {
@@ -13,20 +11,14 @@ export async function getProducts(req, res) {
     response.docs.forEach((doc) => productResponse.push(doc.data()));
 
     if (!productResponse.length) {
-      status = 404;
-      errorCode = "not-found";
-      errorMessage = "No products found.";
+      return next(new NotFoundError("No products found."));
     }
   } catch (err) {
-    status = 500;
-    errorCode = err.errorCode;
-    errorMessage = err.message;
+    return next(new InternalServerError(err.message));
   }
 
-  res.status(status).json({
-    status,
-    errorCode,
-    errorMessage,
+  res.status(200).json({
+    status: 200,
     products: productResponse,
   });
 }
